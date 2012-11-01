@@ -8,14 +8,20 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate>{
-}
+@interface ViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
+@property (strong) NSArray *monthNames;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad
 {
+    
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setLocale:[[NSLocale alloc] initWithLocaleIdentifier:[[NSLocale preferredLanguages] objectAtIndex:0]]];
+    self.monthNames = [df monthSymbols];
+    
+    
     [super viewDidLoad];
     
     UIPickerView *picker = [[UIPickerView alloc] init];
@@ -83,7 +89,13 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSString stringWithFormat:@"%d", row+1];
+    NSString *result;
+    if (component == 0) {
+        result = [NSString stringWithFormat:@"%d", row+1];
+    } else {
+        result = [self.monthNames objectAtIndex:row];
+    }
+    return result;
 }
 
 @end
